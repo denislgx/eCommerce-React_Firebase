@@ -1,10 +1,12 @@
 import React from "react";
 import Subtotal from "./Subtotal";
+import { useStateValue } from "../StateProvider.js";
 
 import checkoutAd from "../images/amazon_chekout_ad.jpg";
 import "../styles/Checkout.css";
 
 const Checkout = () => {
+    const [{ basket }, dispatch] = useStateValue();
     return (
         <div className="checkout">
             <div className="chekout__left">

@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useReducer } from "react";
 
+// Selector
+
+export const getBasketTotal = (basket) =>
+    basket?.reduce((amount, product) => product.price + amount, 0);
+
 // Creates the Data Layer
 
 export const StateContext = createContext();
