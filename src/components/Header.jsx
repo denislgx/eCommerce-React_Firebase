@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useStateValue } from "../StateProvider";
 
+import AmazonLogo from "../images/amazon_white_logo.png";
 import "../styles/Header.css";
 
 import SearchIcon from "@material-ui/icons/Search";
@@ -12,11 +13,7 @@ const Header = () => {
     return (
         <div className="header">
             <Link to="/">
-                <img
-                    className="header__logo"
-                    src="https://pngimg.com/uploads/amazon/amazon_PNG11.png"
-                    alt=""
-                />
+                <img className="header__logo" src={AmazonLogo} alt="" />
             </Link>
             <div className="header__search">
                 <input className="header__searchInput" type="text" />
@@ -24,10 +21,14 @@ const Header = () => {
             </div>
 
             <div className="header__nav">
-                <div className="header__option">
-                    <span className="header__optionLineOne">Hello Guest</span>
-                    <span className="header__optionLineTwo">Sign In</span>
-                </div>
+                <Link to="/login">
+                    <div className="header__option">
+                        <span className="header__optionLineOne">
+                            Hello Guest
+                        </span>
+                        <span className="header__optionLineTwo">Sign In</span>
+                    </div>
+                </Link>
                 <div className="header__option">
                     <span className="header__optionLineOne">Returns</span>
                     <span className="header__optionLineTwo">& Orders</span>
