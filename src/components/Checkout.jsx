@@ -7,12 +7,13 @@ import checkoutAd from "../images/amazon_chekout_ad.jpg";
 import "../styles/Checkout.css";
 
 const Checkout = () => {
-    const [{ basket }, dispatch] = useStateValue();
+    const [{ user, basket }, dispatch] = useStateValue();
     return (
         <div className="checkout">
             <div className="chekout__left">
                 <img className="checkout__ad" src={checkoutAd} alt="" />
                 <div>
+                    <h3>Hello, {user ? user.email : "Guest!"}</h3>
                     <h2 className="checkout__title">Your Shopping Basket</h2>
                     {basket?.map((product, index) => (
                         <CheckoutProduct
