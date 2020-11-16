@@ -20,16 +20,18 @@ app.get("/", (req, res) => res.status(200).send("Hello World!"));
 app.post("/payments/create", async (req, res) => {
     const total = req.query.total;
 
-    console.log("PAYMENT REQ RECEIVED: ", total);
+    if (Number(total) > 0) {
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: total,
+            currency: "usd",
+        });
 
-    const paymentIntent = await stripe.paymentIntents.create({
-        amount: total,
-        currency: "usd",
-    });
-
-    res.status(201).send({
-        clientSecret: paymentIntent.client_secret,
-    });
+        res.status(201).send({
+            clientSecret: paymentIntent.client_secret,
+        });
+    } else {
+        res.status(400).console.log("No item was added to the basket!!!!");
+    }
 });
 
 // Listen
