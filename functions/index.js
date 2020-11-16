@@ -30,7 +30,7 @@ app.post("/payments/create", async (req, res) => {
             clientSecret: paymentIntent.client_secret,
         });
     } else {
-        res.status(400).console.log("No item was added to the basket!!!!");
+        res.status(400);
     }
 });
 

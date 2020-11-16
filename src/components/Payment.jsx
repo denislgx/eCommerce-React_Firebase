@@ -35,27 +35,38 @@ const Payment = () => {
             setClientSecret(response.data.clientSecret);
         };
 
-        getClientSecret();
+        if (getBasketTotal(basket) > 0) {
+            getClientSecret();
+        } else {
+            alert("Your basket is empty! Search for a product.");
+            history.push("/");
+        }
     }, [basket]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setProccesing(true);
 
-        const payload = await stripe
-            .confirmCardPayment(clientSecret, {
-                payment_method: {
-                    card: elements.getElement(CardElement),
-                },
-            })
-            .then(({ paymentIntent }) => {
-                // Payment Intent = payment confirmation
-                setSucceeded(true);
-                setError(null);
-                setProccesing(false);
+        if (getBasketTotal(basket) > 0) {
+            setProccesing(true);
 
-                history.replace("/orders");
-            });
+            const payload = await stripe
+                .confirmCardPayment(clientSecret, {
+                    payment_method: {
+                        card: elements.getElement(CardElement),
+                    },
+                })
+                .then(({ paymentIntent }) => {
+                    // Payment Intent = payment confirmation
+                    setSucceeded(true);
+                    setError(null);
+                    setProccesing(false);
+
+                    history.replace("/orders");
+                });
+        } else {
+            alert("Your basket is empty! Search for a product.");
+            history.push("/");
+        }
     };
 
     const handleChange = (event) => {
