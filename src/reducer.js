@@ -4,7 +4,6 @@ export const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-    console.log(action);
     switch (action.type) {
         case "ADD_TO_BASKET":
             return { ...state, basket: [...state.basket, action.item] };
@@ -21,8 +20,9 @@ const reducer = (state = initialState, action) => {
                     `Can't remove product (id: ${action.id}) as it's not in the basket!`
                 );
             }
-
             return { ...state, basket: newBasket };
+        case "EMPTY_BASKET":
+            return { ...state, basket: [] };
         case "SET_USER":
             return { ...state, user: action.user };
         default:

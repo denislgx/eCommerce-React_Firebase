@@ -5,6 +5,7 @@ import { useStateValue } from "../StateProvider";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import CurrencyFormat from "react-currency-format";
 import { getBasketTotal } from "../StateProvider";
+import { database } from "../firebase";
 import axios from "../axios";
 
 import "../styles/Payment.css";
@@ -46,9 +47,8 @@ const Payment = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (getBasketTotal(basket) > 0) {
+        if (getBasketTotal(basket) > 0 && user) {
             setProccesing(true);
-
             const payload = await stripe
                 .confirmCardPayment(clientSecret, {
                     payment_method: {
@@ -57,11 +57,25 @@ const Payment = () => {
                 })
                 .then(({ paymentIntent }) => {
                     // Payment Intent = payment confirmation
+                    database
+                        .collection("users")
+                        .doc(user?.uid)
+                        .collection("orders")
+                        .doc(paymentIntent.id)
+                        .set({
+                            basket: basket,
+                            amount: paymentIntent.amount,
+                            created: paymentIntent.created,
+                        });
+
                     setSucceeded(true);
                     setError(null);
                     setProccesing(false);
 
                     history.replace("/orders");
+                    dispatch({
+                        type: "EMPTY_BASKET",
+                    });
                 });
         } else {
             alert("Your basket is empty! Search for a product.");
@@ -130,6 +144,11 @@ const Payment = () => {
                                     prefix={"$"}
                                 />
                                 <button
+                                    className={
+                                        disabled
+                                            ? "payment__button--disabled"
+                                            : "payment__button--enable"
+                                    }
                                     disabled={
                                         proccessing || disabled || succeeded
                                     }

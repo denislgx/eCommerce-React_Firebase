@@ -6,8 +6,9 @@ import { useStateValue, getBasketTotal } from "../StateProvider.js";
 import "../styles/Subtotal.css";
 
 const Subtotal = () => {
-    const [{ basket }, dispatch] = useStateValue();
+    const [{ basket, user }, dispatch] = useStateValue();
     const history = useHistory();
+
     return (
         <div className="subtotal">
             <CurrencyFormat
@@ -34,7 +35,18 @@ const Subtotal = () => {
                 thousandSeparator={true}
                 prefix={"$"}
             />
-            <button onClick={() => history.push("/payment")}>
+            <button
+                onClick={
+                    user === null
+                        ? () => (
+                              alert(
+                                  "You need to login to proceed with the purchase."
+                              ),
+                              history.push("/login")
+                          )
+                        : () => history.push("/payment")
+                }
+            >
                 Proceed to Checkout
             </button>
         </div>
